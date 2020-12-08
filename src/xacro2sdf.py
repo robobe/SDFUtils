@@ -105,10 +105,22 @@ class converter():
         for node in elements:
             if not node.hasAttribute("uri"):
                 raise Exception("include uri not declare")
-            pattern = re.compile(r'file://(.*?)', re.S)
-            new_value = re.sub(pattern, lambda x: x.group(1), node.getAttribute("uri"))
+            package_path = os.path.join(os.path.dirname(__file__), "helpers")
+            for prefix, source_dir in [
+                (r'file://(.*?)', self.__file_dir),
+                (r'package://(.*?)', package_path)
+                ]:
+                pattern = re.compile(prefix, re.S)
+                match = pattern.search(node.getAttribute("uri"))
+                if match:
+                    _, start = match.span()
+                    new_value = node.getAttribute("uri")[start:]
+                    file_name = os.path.join(source_dir, new_value)
+                    break
+
             
-            file_name = os.path.join(self.__file_dir, new_value)
+            
+            
             parent = node.parentNode
             parent.removeChild(node)
             self.__load(file_name)
@@ -146,7 +158,7 @@ def main():
         inputfile = os.path.join(inputfile, "macro.sdf.xacro")
         outputfile = os.path.join(dir_name, "../output")
         outputfile = os.path.join(outputfile, "model.sdf")
-        # outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
+        outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
         con = converter()
         con.run(inputfile, outputfile)
 
