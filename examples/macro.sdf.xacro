@@ -1,0 +1,65 @@
+<sdf version="1.7" xmlns:xacro="http://dd">
+    <xacro:include uri="file://data.xacro" />
+    <xacro:include uri="file://common.xacro" />
+    <xacro:include uri="file://color.xacro" />
+    <xacro:property name="base_mass2" value="100" />
+    <model name='heavy_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <!-- base -->
+        <link name="heavy_base_link">
+            <!-- position the base such that the bottom touches the floor -->
+            <pose>0 0 0.55 0 0 0</pose>
+            <inertial>
+                <xacro:inertia_box m="${base_mass}" x="${base_x}" y="${base_y}" z="${base_z}" />
+            </inertial>
+            <!-- Same geometry as visual -->
+            <collision name="heavy_base_collision">
+                <xacro:geometry_box x="${base_x}" y="${base_y}" z="${base_z}"/>
+            </collision>
+            <!-- Same geometry as collision -->
+            <visual name="heavy_base_visual">
+                <xacro:geometry_box x="${base_x}" y="${base_y}" z="${base_z}"/>
+                <material>
+                    <xacro:color color_name="Blue"/>
+                </material>
+            </visual>
+        </link>
+        <!-- wheel macro -->
+        <xacro:macro name="wheel" params="prefix xpos ypos">
+            <link name="wheel_${prefix}">
+                <pose  relative_to="heavy_base_link">${xpos} ${ypos} 0 1.5707 0 0</pose>
+                <inertial>
+                    <xacro:inertia_cylinder m="${wheel_mass}" r="${wheel_r}" l="${wheel_l}" />
+                </inertial>
+                <visual name="wheel_visual_${prefix}">
+                    <xacro:geometry_cylinder r="${wheel_r}" l="${wheel_l}"/>
+                    <material>
+                        <xacro:color color_name="Red"/>
+                    </material>
+                </visual>
+                <collision name="wheel_collision_${prefix}">
+                    <xacro:geometry_cylinder r="${wheel_r}" l="${wheel_l}"/>
+                </collision>
+            </link>
+        </xacro:macro>
+        <!-- call wheel macro -->
+        <xacro:wheel prefix="left" xpos="${(base_x/2)*0.8}" ypos="-${base_y/2}"/>
+        <xacro:wheel prefix="right" xpos="${(base_x/2)*0.8}" ypos="${base_y/2}"/>
+       
+        <!-- joint macro -->
+        <xacro:macro name="wheel_joint" params="prefix wheel parent">
+            <joint name="wheel_joint_${prefix}" type="revolute">
+                <parent>${parent}</parent>
+                <child>${wheel}</child>
+                <pose>0 0 0 0 0 0</pose>
+                <axis>
+                  <xyz>0 0 1</xyz>
+                </axis>
+              </joint>
+        </xacro:macro>
+        <!-- call joint macro -->
+        <xacro:wheel_joint prefix="left" wheel="wheel_left" parent="heavy_base_link"/>
+        <xacro:wheel_joint prefix="right" wheel="wheel_right" parent="heavy_base_link"/>
+        
+    </model>
+</sdf>
