@@ -73,7 +73,7 @@ class converter():
         parent = node.parentNode
         parent.removeChild(node)
         # add root tag for valid parse
-        data = "<macro xmlns:xacro='http://dd'>" + data  + "</macro>"
+        data = "<macro xmlns:xacro='http://xacro'>" + data  + "</macro>"
         inner = minidom.parseString(data).documentElement
         for e in list(inner.childNodes):
             if e.nodeType == minidom.Node.ELEMENT_NODE:
@@ -156,7 +156,7 @@ class converter():
     def __save(self):
         with (open(self.__output_file, "w")) as f:
             data = self.__root_doc.toxml()
-            data = data.replace('xmlns:xacro="http://dd"', "")
+            data = data.replace('xmlns:xacro="http://xacro"', "")
             f.writelines(data)
 
 def main():
