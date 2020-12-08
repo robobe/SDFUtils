@@ -44,6 +44,8 @@ class converter():
                         self.__load_macros(e)
                     elif cmd == "property":
                         self.__load_properties(e)
+                    elif cmd == "python": 
+                        self.__load_python(e)
                     else:
                         self.__run_macro(e, cmd)
                 else:
@@ -99,6 +101,19 @@ class converter():
         self.__macros[name] = f_func
         parent = node.parentNode
         parent.removeChild(node)
+
+    def __load_python(self, node): 
+        # get node cdata - the text starts at the second child node.
+        py_string = node.childNodes[1].nodeValue
+        print(py_string)
+        py_code = compile(py_string, "<string>", "exec")
+        loc = {} # dict storing all the local varibales generated inside the py_code
+        exec(py_code, globals(), loc)
+        # loc['return_values'] needs to be a dictionary containing the name and property values wanting to be inserted to self.properties dict
+        # append values to property dict
+        for k in loc['return_values']: 
+            self.__properties[k] = loc['return_values'][k]
+        # print(loc['return_values'])
 
     def __load_includes(self, node):
         elements = node.getElementsByTagNameNS("http://dd", "include")
