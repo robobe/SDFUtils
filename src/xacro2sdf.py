@@ -105,7 +105,6 @@ class converter():
     def __load_python(self, node): 
         # get node cdata - the text starts at the second child node.
         py_string = node.childNodes[1].nodeValue
-        print(py_string)
         py_code = compile(py_string, "<string>", "exec")
         loc = {} # dict storing all the local varibales generated inside the py_code
         exec(py_code, globals(), loc)
@@ -158,9 +157,9 @@ def main():
     else:
         dir_name = os.path.dirname(__file__)
         inputfile = os.path.join(dir_name, "../examples")
-        inputfile = os.path.join(inputfile, "macro.sdf.xacro")
+        inputfile = os.path.join(inputfile, "py_test.sdf.xacro")
         outputfile = os.path.join(dir_name, "../output")
-        outputfile = os.path.join(outputfile, "model.sdf")
+        outputfile = os.path.join(outputfile, "py_test.sdf")
         # outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
         con = converter()
         con.run(inputfile, outputfile)
