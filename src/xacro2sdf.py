@@ -169,12 +169,12 @@ def main():
     else:
         dir_name = os.path.dirname(__file__)
         inputfile = os.path.join(dir_name, "../examples")
-        inputfile = os.path.join(inputfile, "balancer.sdf.xacro")
+        inputfile = os.path.join(inputfile, "py_test.sdf.xacro")
         outputfile = os.path.join(dir_name, "../output")
-        outputfile = os.path.join(outputfile, "model.sdf")
-        outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
+        outputfile = os.path.join(outputfile, "py_test.sdf")
+        # outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
         con = converter()
         con.run(inputfile, outputfile)
 
 if __name__ == "__main__":
-    main()Merge branch 'main' of https://github.com/robobe/SDFUtils into main
+    main()

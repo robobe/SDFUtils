@@ -1,20 +1,20 @@
 <sdf xmlns:xacro="http://dd">
-    <xacro:include uri="file://data.xacro" />
-    <xacro:include uri="file://common.xacro" />
     <xacro:property name="base_mass" value="100" />
     <xacro:python>
     <![CDATA[
 import numpy as np 
 def foo(): 
     if 2 > 5: 
-        return 5,3,2
+        return 5,4,3,2,1
     global np
     b = np.array([0,1])
     x = 3433
-    u = 324
-    return x,u,b
+    y = 324
+    z = 3
+    m = 1
+    return x,y,z,m,b
 temp = foo()
-return_values = {'x': temp[0], 'u': temp[1], 'b': temp[2]}
+return_values = {'x': temp[0], 'y': temp[1], 'z': temp[2], 'm': temp[3], 'b': temp[4]}
 ]]>
     </xacro:python> 
 
@@ -25,7 +25,15 @@ return_values = {'x': temp[0], 'u': temp[1], 'b': temp[2]}
             <pose>0 0 0.05 0 0 0</pose>
             <inertial>
                 <!-- use here of python x value -->
-                <xacro:inertia_box m="100" x="${x}" y="1" z="0.1" />
+                <mass>${m}</mass>
+                <inertia>
+                    <ixx>${m*(y*y+z*z)/12}</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>${m*(x*x+z*z)/12}</iyy>
+                    <iyz>0</iyz>
+                    <izz>${m*(x*x+y*y)/12}</izz>
+                </inertia>
             </inertial>
             <!-- Same geometry as visual -->
             <collision name="heavy_base_collision">
