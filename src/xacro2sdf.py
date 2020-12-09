@@ -117,6 +117,9 @@ class converter():
             self.__properties[k] = loc['return_values'][k]
         # print(loc['return_values'])
 
+        parent = node.parentNode
+        parent.removeChild(node)
+
     def __load_includes(self, node):
         # elements = node.getElementsByTagNameNS(XACRO_NS, "include")
         # for node in elements:
