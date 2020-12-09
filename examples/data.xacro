@@ -1,5 +1,6 @@
-<sdf xmlns:xacro="http://dd">
-    <xacro:property name="base_mass" value="200" />
+<sdf xmlns:xacro="http://xacro">
+    <xacro:property name="PI" value="3.14" />
+    <xacro:property name="base_mass" value="2" />
     <xacro:property name="bodylen" value=".6" />
     <xacro:property name="base_x" value="2.2" />
     <xacro:property name="base_y" value="1" />

@@ -1,4 +1,4 @@
-<sdf version="1.7" xmlns:xacro="http://dd">
+<sdf version="1.7" xmlns:xacro="http://xacro">
     <xacro:include uri="file://data.xacro" />
     <xacro:include uri="package://common.xacro" />
     <xacro:include uri="package://color.xacro" />
@@ -8,21 +8,14 @@
         <!-- base -->
         <link name="heavy_base_link">
             <!-- position the base such that the bottom touches the floor -->
-            <pose>0 0 0.55 0 0 0</pose>
+            <pose>0 0 0.55 0 ${PI/2} 0</pose>
             <inertial>
                 <xacro:inertia_box m="${base_mass}" x="${base_x}" y="${base_y}" z="${base_z}" />
             </inertial>
             <!-- Same geometry as visual -->
             <collision name="heavy_base_collision">
                 <xacro:geometry_box x="${base_x}" y="${base_y}" z="${base_z}"/>
-                <surface>
-                    <friction>
-                      <ode>
-                        <mu>0</mu>
-                        <mu2>0</mu2>
-                      </ode>
-                    </friction>
-                  </surface>
+                
             </collision>
             <!-- Same geometry as collision -->
             <visual name="heavy_base_visual">
@@ -69,5 +62,26 @@
         <xacro:wheel_joint prefix="left" wheel="wheel_left" parent="heavy_base_link"/>
         <xacro:wheel_joint prefix="right" wheel="wheel_right" parent="heavy_base_link"/>
         
+        <link name="imu_base">
+            <pose relative_to="heavy_base_link">-${(base_x/2)-0.1} 0 0.1 0 0 0</pose>
+            <inertial>
+                <xacro:inertia_box m="0.1" x="0.1" y="0.1" z="0.1"/>
+            </inertial>
+            <!-- Same geometry as visual -->
+            <collision name="imu_base_collision">
+                <xacro:geometry_box x="0.1" y="0.1" z="0.1"/>
+            </collision>
+            <!-- Same geometry as collision -->
+            <visual name="imu_base_visual">
+                <xacro:geometry_box x="0.1" y="0.1" z="0.1"/>
+                <material>
+                    <xacro:color color_name="Black"/>
+                </material>
+            </visual>
+        </link>
+        <joint name="imu_base_joint" type="fixed">
+            <parent>heavy_base_link</parent>
+            <child>imu_base</child>
+          </joint>
     </model>
 </sdf>

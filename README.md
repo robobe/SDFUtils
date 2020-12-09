@@ -58,3 +58,16 @@ include other `xacro` files to use
 - `data.xacro`: custom file hold data properties for example
 - `common.xacro`: common macro's like inertia and basic geometry
 - `color.xacro`: color and texture macro's
+
+### common 
+#### macros
+- inertia_box
+- inertia_sphere
+- inertia_cylinder
+- geometry_cylinder
+- geometry_box
+- geometry_sphere
+
+### color
+#### macro
+- color

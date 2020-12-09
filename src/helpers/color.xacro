@@ -1,4 +1,4 @@
-<sdf xmlns:xacro="http://dd">
+<sdf xmlns:xacro="http://xacro">
     <xacro:macro name="color" params="color_name">
         <lighting>1</lighting>
         <script>
@@ -7,4 +7,5 @@
         </script>
     </xacro:macro>
 
+    
 </sdf>

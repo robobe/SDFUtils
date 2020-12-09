@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<sdf xmlns:xacro="http://dd">
+<sdf xmlns:xacro="http://xacro">
+
+<!-- inertia_box -->
 <xacro:macro name="inertia_box" params="m x y z">
     <mass>${m}</mass>
     <inertia>
@@ -9,6 +11,19 @@
         <iyy>${m*(x*x+z*z)/12}</iyy>
         <iyz>0</iyz>
         <izz>${m*(x*x+y*y)/12}</izz>
+    </inertia>
+</xacro:macro>
+
+<!-- inertia_sphere -->
+<xacro:macro name="inertia_sphere" params="m r">
+    <mass>${m}</mass>
+    <inertia>
+        <ixx>${2*m*r*r/5}</ixx>
+        <ixy>0</ixy>
+        <ixz>0</ixz>
+        <iyy>${2*m*r*r/5}</iyy>
+        <iyz>0</iyz>
+        <izz>${2*m*r*r/5}</izz>
     </inertia>
 </xacro:macro>
 
@@ -41,6 +56,15 @@
         <box>
             <size>${x} ${y} ${z}</size>
         </box>
+    </geometry>
+</xacro:macro>
+
+<!-- geometry_sphere -->
+<xacro:macro name="geometry_sphere" params="r">
+    <geometry>
+        <sphere>
+            <radius>${r}</radius>
+        </sphere>
     </geometry>
 </xacro:macro>
 </sdf>
