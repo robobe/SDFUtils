@@ -73,7 +73,7 @@ class converter():
         parent = node.parentNode
         parent.removeChild(node)
         # add root tag for valid parse
-        data = "<macro xmlns:xacro='http://dd'>" + data  + "</macro>"
+        data = "<macro xmlns:xacro='http://xacro'>" + data  + "</macro>"
         inner = minidom.parseString(data).documentElement
         for e in list(inner.childNodes):
             if e.nodeType == minidom.Node.ELEMENT_NODE:
@@ -119,10 +119,22 @@ class converter():
         for node in elements:
             if not node.hasAttribute("uri"):
                 raise Exception("include uri not declare")
-            pattern = re.compile(r'file://(.*?)', re.S)
-            new_value = re.sub(pattern, lambda x: x.group(1), node.getAttribute("uri"))
+            package_path = os.path.join(os.path.dirname(__file__), "helpers")
+            for prefix, source_dir in [
+                (r'file://(.*?)', self.__file_dir),
+                (r'package://(.*?)', package_path)
+                ]:
+                pattern = re.compile(prefix, re.S)
+                match = pattern.search(node.getAttribute("uri"))
+                if match:
+                    _, start = match.span()
+                    new_value = node.getAttribute("uri")[start:]
+                    file_name = os.path.join(source_dir, new_value)
+                    break
+
             
-            file_name = os.path.join(self.__file_dir, new_value)
+            
+            
             parent = node.parentNode
             parent.removeChild(node)
             self.__load(file_name)
@@ -143,7 +155,7 @@ class converter():
     def __save(self):
         with (open(self.__output_file, "w")) as f:
             data = self.__root_doc.toxml()
-            data = data.replace('xmlns:xacro="http://dd"', "")
+            data = data.replace('xmlns:xacro="http://xacro"', "")
             f.writelines(data)
 
 def main():
@@ -159,8 +171,8 @@ def main():
         inputfile = os.path.join(dir_name, "../examples")
         inputfile = os.path.join(inputfile, "py_test.sdf.xacro")
         outputfile = os.path.join(dir_name, "../output")
-        outputfile = os.path.join(outputfile, "py_test.sdf")
-        # outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
+        outputfile = os.path.join(outputfile, "model.sdf")
+        outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
         con = converter()
         con.run(inputfile, outputfile)
 
