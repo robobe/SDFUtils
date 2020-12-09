@@ -59,6 +59,31 @@ include other `xacro` files to use
 - `common.xacro`: common macro's like inertia and basic geometry
 - `color.xacro`: color and texture macro's
 
+## pure python
+- use python inside your models, ident the same as in python (starting from column 0)!
+- store your needed variables in "return_values" dictionary and use them later in the model by the given keys.   
+
+```xml
+    <xacro:python>
+    <![CDATA[
+import numpy as np 
+def foo(): 
+    if 2 > 5: 
+        return 5,4,3,2,1
+    global np
+    b = np.array([0,1])
+    x = 3433
+    y = 324
+    z = 3
+    m = 1
+    return x,y,z,m,b
+temp = foo()
+return_values = {'x': temp[0], 'y': temp[1], 'z': temp[2], 'm': temp[3], 'b': temp[4]}
+]]>
+    </xacro:python> 
+```
+
+
 ### common 
 #### macros
 - inertia_box
