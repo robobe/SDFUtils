@@ -5,6 +5,8 @@ from types import FunctionType
 
 from xml.dom import minidom
 
+XACRO_NS = "http://xacro"
+
 def try_convert_to_number(value):
     try:
         return float(value)
@@ -31,7 +33,6 @@ class converter():
         doc = minidom.parse(file_name).documentElement
         if root:
             self.__root_doc = doc
-        self.__load_includes(doc)
         self.__run(doc)
         
 
@@ -46,6 +47,8 @@ class converter():
                         self.__load_properties(e)
                     elif cmd == "python": 
                         self.__load_python(e)
+                    elif cmd == "include":
+                        self.__load_includes(e)
                     else:
                         self.__run_macro(e, cmd)
                 else:
@@ -73,7 +76,7 @@ class converter():
         parent = node.parentNode
         parent.removeChild(node)
         # add root tag for valid parse
-        data = "<macro xmlns:xacro='http://xacro'>" + data  + "</macro>"
+        data = f"<macro xmlns:xacro='{XACRO_NS}'>" + data  + "</macro>"
         inner = minidom.parseString(data).documentElement
         for e in list(inner.childNodes):
             if e.nodeType == minidom.Node.ELEMENT_NODE:
@@ -116,29 +119,26 @@ class converter():
         # print(loc['return_values'])
 
     def __load_includes(self, node):
-        elements = node.getElementsByTagNameNS("http://dd", "include")
-        for node in elements:
-            if not node.hasAttribute("uri"):
-                raise Exception("include uri not declare")
-            package_path = os.path.join(os.path.dirname(__file__), "helpers")
-            for prefix, source_dir in [
-                (r'file://(.*?)', self.__file_dir),
-                (r'package://(.*?)', package_path)
-                ]:
-                pattern = re.compile(prefix, re.S)
-                match = pattern.search(node.getAttribute("uri"))
-                if match:
-                    _, start = match.span()
-                    new_value = node.getAttribute("uri")[start:]
-                    file_name = os.path.join(source_dir, new_value)
-                    break
+        # elements = node.getElementsByTagNameNS(XACRO_NS, "include")
+        # for node in elements:
+        if not node.hasAttribute("uri"):
+            raise Exception("include uri not declare")
+        package_path = os.path.join(os.path.dirname(__file__), "helpers")
+        for prefix, source_dir in [
+            (r'file://(.*?)', self.__file_dir),
+            (r'package://(.*?)', package_path)
+            ]:
+            pattern = re.compile(prefix, re.S)
+            match = pattern.search(node.getAttribute("uri"))
+            if match:
+                _, start = match.span()
+                new_value = node.getAttribute("uri")[start:]
+                file_name = os.path.join(source_dir, new_value)
+                break
 
-            
-            
-            
-            parent = node.parentNode
-            parent.removeChild(node)
-            self.__load(file_name)
+        parent = node.parentNode
+        parent.removeChild(node)
+        self.__load(file_name)
 
     def __load_properties(self, node):
         name = node.getAttribute("name")
@@ -156,7 +156,7 @@ class converter():
     def __save(self):
         with (open(self.__output_file, "w")) as f:
             data = self.__root_doc.toxml()
-            data = data.replace('xmlns:xacro="http://xacro"', "")
+            data = data.replace(f'xmlns:xacro="{XACRO_NS}"', "")
             f.writelines(data)
 
 def main():
@@ -170,7 +170,7 @@ def main():
     else:
         dir_name = os.path.dirname(__file__)
         inputfile = os.path.join(dir_name, "../examples")
-        inputfile = os.path.join(inputfile, "macro.sdf.xacro")
+        inputfile = os.path.join(inputfile, "balancer.sdf.xacro")
         outputfile = os.path.join(dir_name, "../output")
         outputfile = os.path.join(outputfile, "model.sdf")
         outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
