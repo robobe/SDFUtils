@@ -1,4 +1,4 @@
-<sdf xmlns:xacro="http://dd">
+<sdf xmlns:xacro="http://xacro">
     <xacro:property name="width" value=".2" />
     <xacro:property name="bodylen" value=".6" />
     <xacro:property name="x" value="1" />
@@ -10,14 +10,6 @@
             <geometry>
                 <cylinder radius="${2*width}" length="${bodylen}" />
             </geometry>
-            <material name="blue">
-                <color rgba="0 0 .8 1" />
-            </material>
         </visual>
-        <collision>
-            <geometry>
-                <cylinder radius="${width}" length="${bodylen}" />
-            </geometry>
-        </collision>
     </link>
 </sdf>
