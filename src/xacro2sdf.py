@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import math
 from types import FunctionType
 
 from xml.dom import minidom
@@ -17,9 +18,14 @@ class converter():
     def __init__(self):
         self.__root_doc = None
         self.__doc = None
-        self.__properties = {}
+        self.__properties = self.__init_properties()
         self.__macros = {}
         self.__file_dir = ""
+
+    def __init_properties(self):
+        return {
+            "PI": math.pi
+        }
 
     def run(self, input_file, output_file):
         self.__output_file = output_file
@@ -170,10 +176,10 @@ def main():
     else:
         dir_name = os.path.dirname(__file__)
         inputfile = os.path.join(dir_name, "../examples")
-        inputfile = os.path.join(inputfile, "balancer.sdf.xacro")
+        inputfile = os.path.join(inputfile, "rrbot.sdf.xacro")
         outputfile = os.path.join(dir_name, "../output")
         outputfile = os.path.join(outputfile, "model.sdf")
-        outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
+        outputfile = "/home/user/projects/gazebo/models/rrbot/model.sdf"
         con = converter()
         con.run(inputfile, outputfile)
 
