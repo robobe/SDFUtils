@@ -114,7 +114,6 @@ class converter():
     def __load_python(self, node): 
         # get node cdata - the text starts at the second child node.
         py_string = node.childNodes[1].nodeValue
-        print(py_string)
         py_code = compile(py_string, "<string>", "exec")
         loc = {} # dict storing all the local varibales generated inside the py_code
         exec(py_code, globals(), loc)
@@ -123,6 +122,9 @@ class converter():
         for k in loc['return_values']: 
             self.__properties[k] = loc['return_values'][k]
         # print(loc['return_values'])
+
+        parent = node.parentNode
+        parent.removeChild(node)
 
     def __load_includes(self, node):
         # elements = node.getElementsByTagNameNS(XACRO_NS, "include")
@@ -166,6 +168,9 @@ class converter():
             f.writelines(data)
 
 def main():
+    """
+    parse arguments and 
+    """
     args_no = len(sys.argv)
     if args_no >= 2:
         inputfile = sys.argv[1]
@@ -173,6 +178,8 @@ def main():
         if args_no == 3:
             outputfile = sys.argv[2]
         print(inputfile, outputfile)
+        if args_no >= 4: 
+            raise Exception("usage is: python3 xacro2sdf.xacro2sdf input_file output_file")
     else:
         dir_name = os.path.dirname(__file__)
         inputfile = os.path.join(dir_name, "../examples")
