@@ -85,5 +85,6 @@
             <parent>heavy_base_link</parent>
             <child>imu_base</child>
           </joint>
+          <plugin name="simple_plug" filename="libsimple_sub.so"/>
     </model>
 </sdf>
