@@ -5,9 +5,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="SDFUtils", 
-    version="0.0.1",
+    version="1.0.0",
     author="robobe, OSForLife",
-    description="Gazebo SDF utils ",
+    description="Gazebo SDF utils - write smaller and simpler xacro and get richer and complex SDF files",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/robobe/SDFUtils",

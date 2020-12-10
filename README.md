@@ -1,6 +1,7 @@
 # SDFUtils
-Gazebo SDF utils
-
+Gazebo SDF utils.  Write smaller and simpler xacro and get richer and complex SDF files.
+## basic usage: 
+python3 xacro2sdf.xacro2sdf input_xacro_file output_sdf_file 
 ## XACRO
 - properties
 - macro
