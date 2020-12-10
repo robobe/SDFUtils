@@ -162,6 +162,9 @@ class converter():
             f.writelines(data)
 
 def main():
+    """
+    parse arguments and 
+    """
     args_no = len(sys.argv)
     if args_no >= 2:
         inputfile = sys.argv[1]
@@ -169,6 +172,8 @@ def main():
         if args_no == 3:
             outputfile = sys.argv[2]
         print(inputfile, outputfile)
+        if args_no >= 4: 
+            raise Exception("usage is: python3 xacro2sdf.xacro2sdf input_file output_file")
     else:
         dir_name = os.path.dirname(__file__)
         inputfile = os.path.join(dir_name, "../examples")
@@ -176,8 +181,8 @@ def main():
         outputfile = os.path.join(dir_name, "../output")
         outputfile = os.path.join(outputfile, "py_test.sdf")
         # outputfile = "/home/user/projects/gazebo/models/balancer2/model.sdf"
-        con = converter()
-        con.run(inputfile, outputfile)
+    con = converter()
+    con.run(inputfile, outputfile)
 
 if __name__ == "__main__":
     main()
